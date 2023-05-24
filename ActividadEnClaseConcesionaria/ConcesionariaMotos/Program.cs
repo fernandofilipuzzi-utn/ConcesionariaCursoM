@@ -6,113 +6,94 @@ using System.Threading.Tasks;
 
 namespace ConcesionariaMotos
 {
-    class Program
+class Program
+{
+    static void ImprimirMenu()
     {
-        static void ImprimirMenu()
+        Console.Clear();
+        Console.WriteLine("1- Entrar embarque");
+        Console.WriteLine("2- Mostrar caja");
+        Console.WriteLine("otro- salir");
+    }
+
+    static void Main(string[] args)
+    {
+
+        Concesionaria c = new Concesionaria();
+
+        #region solicitar año actual
+        Console.WriteLine("Ingrese el año actual");
+        c.añoActual = Convert.ToInt32(Console.ReadLine());
+        #endregion
+
+        int op;
+        do
         {
-            Console.Clear();
-            Console.WriteLine("1- Entrar embarque");
-            Console.WriteLine("2- Mostrar caja");
-            Console.WriteLine("otro- salir");
-        }
+            //Caratula del menu
+            ImprimirMenu();
+            op = Convert.ToInt32(Console.ReadLine());
 
-        static void Main(string[] args)
-        {
-
-            #region motor
-            int añoFabricacion = 0;
-            double montoFabricacion = 0;
-            double porcentajeDepreciacion = 10d / 100;
-            double montoActual;
-            #endregion
-            #region XEmbarque
-            int numeroEmbarque = 0;
-            double acumuladoXEmbarque = 0;
-            double cantEmbarques = 0;
-            #endregion
-            #region todos
-            int añoActual = 0;
-            double acumuladoEmbarques = 0;
-            #endregion
-
-            #region solicitar año actual
-            Console.WriteLine("Ingrese el año actual");
-            añoActual = Convert.ToInt32(Console.ReadLine());
-            #endregion
-
-            int op;
-            do
+            switch (op)
             {
-                //Caratula del menu
-                ImprimirMenu();
-                op = Convert.ToInt32(Console.ReadLine());
+                case 1:
+                    {
+                        Console.Clear();
 
-                switch (op)
-                {
-                    case 1:
+                        #region solicitar el número de embarque
+                        Console.WriteLine("Ingrese el número de embarque");
+                        int numeroEmbarque = Convert.ToInt32(Console.ReadLine());
+                        #endregion
+
+                        c.IniciarEmbarque(numeroEmbarque);
+
+                        #region solicitar el año de fabricación de la moto
+                        Console.WriteLine("Ingrese Año de fabricación de la moto a ingresar (0-corte)");
+                        int añoFabricacion = Convert.ToInt32(Console.ReadLine());
+                        #endregion
+                        //xmoto
+
+                        while (añoFabricacion > 0)
                         {
-                            Console.Clear();
-
-                            #region inicilizar variables
-                            acumuladoXEmbarque = 0;
+                            #region solicitar el monto de fabriación
+                            Console.WriteLine("Ingrese el monto de fabricación");
+                            double montoFabricacion = Convert.ToDouble(Console.ReadLine());
                             #endregion
 
-                            #region solicitar el número de embarque
-                            Console.WriteLine("Ingrese el número de embarque");
-                            numeroEmbarque = Convert.ToInt32(Console.ReadLine());
-                            #endregion
+                            c.RegistrarMoto(añoFabricacion, montoFabricacion);
 
-                            #region solicitar el año de fabricación de la moto
-                            Console.WriteLine("Ingrese Año de fabricación de la moto a ingresar (0-corte)");
+                            #region ingrese año de fabricación
+                            Console.WriteLine("Ingrese Año de fabricación (0-corte)");
                             añoFabricacion = Convert.ToInt32(Console.ReadLine());
                             #endregion
-                            //xmoto
-
-                            while (añoFabricacion > 0)
-                            {
-                                #region solicitar el monto de fabriación
-                                Console.WriteLine("Ingrese el monto de fabricación");
-                                montoFabricacion = Convert.ToDouble(Console.ReadLine());
-                                #endregion
-
-                                #region ingrese año de fabricación
-                                montoActual = montoFabricacion * Math.Pow(1 - porcentajeDepreciacion, añoActual - añoFabricacion);
-                                #endregion
-
-                                acumuladoXEmbarque += montoActual;
-
-                                #region ingrese año de fabricación
-                                Console.WriteLine("Ingrese Año de fabricación (0-corte)");
-                                añoFabricacion = Convert.ToInt32(Console.ReadLine());
-                                #endregion
-
-
-                            }
-                            Console.Clear();
-                            Console.WriteLine("Monto del embarque ingresado: ${0:f2}", acumuladoXEmbarque);
-
-                            acumuladoEmbarques += acumuladoXEmbarque;
-                            cantEmbarques++;
-
-                            Console.WriteLine("Presione una tecla para continuar");
-                            Console.ReadKey();
                         }
-                        break;
-                    case 2:
-                        {
-                            Console.Clear();
+                                                        
+                        Console.Clear();
+                        Console.WriteLine("Monto del embarque ingresado: ${0:f2}", c.acumuladoXEmbarque);
 
-                            Console.WriteLine("Monto de todos los embarques : ${0:f2}", acumuladoEmbarques);
-                            Console.WriteLine("Cantidad de embarques: {0}", cantEmbarques);
+                           
+                        c.FinalizarEmbarque();
 
-                            Console.WriteLine("Presione una tecla para continuar");
-                            Console.ReadKey();
-                        }
-                        break;
-                }
-            } while (op > 0 && op <= 2);
+                           
 
-        }
+                        Console.WriteLine("Presione una tecla para continuar");
+                        Console.ReadKey();
+                    }
+                    break;
+                case 2:
+                    {
+                        Console.Clear();
+
+                        Console.WriteLine("Monto de todos los embarques : ${0:f2}", c.acumuladoEmbarques);
+                        Console.WriteLine("Cantidad de embarques: {0}", c.cantEmbarques);
+
+                        Console.WriteLine("Presione una tecla para continuar");
+                        Console.ReadKey();
+                    }
+                    break;
+            }
+        } while (op > 0 && op <= 2);
+
     }
+}
   
 }
